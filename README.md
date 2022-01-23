@@ -18,17 +18,22 @@ This action checks whether the current branch's H5P version is ahead of, equal t
 - uses: boyum/is-h5p-library-updated-action@v1
   id: h5p-version-check
 
-- uses: thollander/actions-comment-pull-request@v1 # https://github.com/thollander/actions-comment-pull-request
-  if: ${{ steps.h5p-version-check.is-ahead == 'false' }}
+- uses: jwalton/gh-find-current-pr@v1 # https://github.com/jwalton/gh-find-current-pr
+  id: findPrNumber
+
+- name: Create comment
+  uses: peter-evans/create-or-update-comment@v1 # https://github.com/peter-evans/create-or-update-comment
+  if: ${{ steps.h5p-version-check.outputs.is-ahead == 'false' }}
   with:
-    message: |
+    issue-number: ${{ steps.findPrNumber.outputs.number }}
+    body: |
       The library version was not updated.
+
       Current version: ${{ steps.h5p-version-check.current-version-formatted }}
       Main version: ${{ steps.h5p-version-check.main-version-formatted }}
-    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-### Create a release if there's a new version
+### Create a release only if there's a new version
 
 ```yml
 - uses: boyum/is-h5p-library-updated-action@v1
@@ -38,7 +43,7 @@ This action checks whether the current branch's H5P version is ahead of, equal t
   id: release-h5p
 
 - uses: "marvinpinto/action-automatic-releases@latest" # https://github.com/marvinpinto/actions/tree/master/packages/automatic-releases
-  if: ${{ github.ref == 'refs/heads/main' && steps.h5p-version-check.is-ahead == 'true' }}
+  if: ${{ github.ref == 'refs/heads/main' && steps.h5p-version-check.outputs.is-ahead == 'true' }}
   with:
     repo_token: "${{ secrets.GITHUB_TOKEN }}"
     automatic_release_tag: ${{steps.release-h5p.outputs.version}}
