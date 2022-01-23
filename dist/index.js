@@ -35,22 +35,28 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.checkoutCurrentBranch = exports.checkoutMain = void 0;
+exports.checkoutCurrentBranch = exports.checkoutMain = exports.checkoutRepo = void 0;
 const exec = __importStar(__nccwpck_require__(1514));
 const github = __importStar(__nccwpck_require__(5438));
-function checkoutMain(directoryName) {
+function checkoutRepo(directoryName) {
     return __awaiter(this, void 0, void 0, function* () {
         const { owner, repo } = github.context.repo;
-        yield exec.exec(`gh repo clone ${owner}/${repo} ${directoryName}`);
+        const gitHubUri = `git@github.com:${owner}/${repo}.git`;
+        yield exec.exec(`git clone ${gitHubUri} ${directoryName}`);
+    });
+}
+exports.checkoutRepo = checkoutRepo;
+function checkoutMain(directoryName) {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield checkoutRepo(directoryName);
     });
 }
 exports.checkoutMain = checkoutMain;
 function checkoutCurrentBranch(directoryName) {
     return __awaiter(this, void 0, void 0, function* () {
-        const { owner, repo } = github.context.repo;
+        yield checkoutRepo(directoryName);
         const currentBranch = github.context.ref.replace("refs/heads/", "");
-        yield exec.exec(`gh repo clone ${owner}/${repo} ${directoryName}`);
-        yield exec.exec("cd current-branch");
+        yield exec.exec(`cd ${directoryName}`);
         yield exec.exec(`git checkout ${currentBranch}`);
     });
 }
