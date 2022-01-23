@@ -24,6 +24,7 @@ export async function checkoutCurrentBranch(
   await checkoutRepo(directoryName);
 
   const currentBranch = github.context.ref.replace("refs/heads/", "");
-  await exec.exec(`cd ${directoryName}`);
-  await exec.exec(`git checkout ${currentBranch}`);
+  await exec.exec(`git checkout ${currentBranch}`, undefined, {
+    cwd: directoryName,
+  });
 }

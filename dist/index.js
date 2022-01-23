@@ -64,8 +64,9 @@ function checkoutCurrentBranch(directoryName) {
     return __awaiter(this, void 0, void 0, function* () {
         yield checkoutRepo(directoryName);
         const currentBranch = github.context.ref.replace("refs/heads/", "");
-        yield exec.exec(`cd ${directoryName}`);
-        yield exec.exec(`git checkout ${currentBranch}`);
+        yield exec.exec(`git checkout ${currentBranch}`, undefined, {
+            cwd: directoryName,
+        });
     });
 }
 exports.checkoutCurrentBranch = checkoutCurrentBranch;
