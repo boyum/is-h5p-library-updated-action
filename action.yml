@@ -1,11 +1,39 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: Is H5P library updated
+description: Checks the current branch's and the main branch's H5P library version to see if the current branch is ahead of the main branch
+author: boyum
+
+branding:
+  icon: package
+  color: blue
+
 inputs:
-  milliseconds: # change this
-    required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+  fail-if-not-ahead:
+    required: false
+    description: Fail this step if the current branch's version is not ahead of the main branch's version
+    default: "false"
+
+outputs:
+  is-ahead:
+    description: True if the current branch's version is ahead of the main branch's version
+
+  are-equal:
+    description: True if the current branch's version and the main branch's versions are equal
+
+  is-behind:
+    description: True if the current branch's version is behind the main branch's version
+
+  current-version:
+    description: The current version as a JSON string with `majorVersion`, `minorVersion`, and `patchVersion` properties
+
+  main-version:
+    description: The main version as a JSON string with `majorVersion`, `minorVersion`, and `patchVersion` properties
+
+  current-version-formatted:
+    description: The current version as a string on the format `vx.y.z`
+
+  main-version-formatted:
+    description: The main version as a string on the format `vx.y.z`
+
 runs:
-  using: 'node12'
-  main: 'dist/index.js'
+  using: node16
+  main: dist/index.js

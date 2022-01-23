@@ -1,105 +1,66 @@
-<p align="center">
-  <a href="https://github.com/actions/typescript-action/actions"><img alt="typescript-action status" src="https://github.com/actions/typescript-action/workflows/build-test/badge.svg"></a>
-</p>
+# Is H5P library updated
 
-# Create a JavaScript Action using TypeScript
+This action checks whether the current branch's H5P version is ahead of, equal to or behind the main branch's H5P version, by checking the `library.json` files of the two branches.
 
-Use this template to bootstrap the creation of a TypeScript action.:rocket:
+## Usage
 
-This template includes compilation support, tests, a validation workflow, publishing, and versioning guidance.  
+### Break the build if the version numbers aren't updated
 
-If you are new, there's also a simpler introduction.  See the [Hello World JavaScript Action](https://github.com/actions/hello-world-javascript-action)
-
-## Create an action from this template
-
-Click the `Use this Template` and provide the new repo details for your action
-
-## Code in Main
-
-> First, you'll need to have a reasonably modern version of `node` handy. This won't work with versions older than 9, for instance.
-
-Install the dependencies  
-```bash
-$ npm install
+```yml
+- uses: boyum/is-h5p-library-updated-action@v1
+  with:
+    fail-if-not-ahead: true
 ```
 
-Build the typescript and package it for distribution
-```bash
-$ npm run build && npm run package
+### Post a comment if the version numbers aren't updated
+
+```yml
+- uses: boyum/is-h5p-library-updated-action@v1
+  id: h5p-version-check
+
+- uses: thollander/actions-comment-pull-request@v1 # https://github.com/thollander/actions-comment-pull-request
+  if: ${{ steps.h5p-version-check.is-ahead == 'false' }}
+  with:
+    message: |
+      The library version was not updated.
+      Current version: ${{ steps.h5p-version-check.current-version-formatted }}
+      Main version: ${{ steps.h5p-version-check.main-version-formatted }}
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-Run the tests :heavy_check_mark:  
-```bash
-$ npm test
+### Create a release if there's a new version
 
- PASS  ./index.test.js
-  ✓ throws invalid number (3ms)
-  ✓ wait 500 ms (504ms)
-  ✓ test runs (95ms)
+```yml
+- uses: boyum/is-h5p-library-updated-action@v1
+  id: h5p-version-check
 
-...
+- uses: boyum/pack-h5p-action@0.0.6 # https://github.com/boyum/pack-h5p-action
+  id: release-h5p
+
+- uses: "marvinpinto/action-automatic-releases@latest" # https://github.com/marvinpinto/actions/tree/master/packages/automatic-releases
+  if: ${{ github.ref == 'refs/heads/main' && steps.h5p-version-check.is-ahead == 'true' }}
+  with:
+    repo_token: "${{ secrets.GITHUB_TOKEN }}"
+    automatic_release_tag: ${{steps.release-h5p.outputs.version}}
+    prerelease: false
+    files: |
+      ${{steps.release-h5p.outputs.filePath}}
 ```
 
-## Change action.yml
+## Options
 
-The action.yml defines the inputs and output for your action.
+| Name | Required | Default value | Description |
+|---|---|---|---|
+| `fail-if-not-ahead` | false | `false` | Fail this step if the current branch's version is not ahead of the main branch's version. |
 
-Update the action.yml with your name, description, inputs and outputs for your action.
+## Outputs
 
-See the [documentation](https://help.github.com/en/articles/metadata-syntax-for-github-actions)
-
-## Change the Code
-
-Most toolkit and CI/CD operations involve async operations so the action is run in an async function.
-
-```javascript
-import * as core from '@actions/core';
-...
-
-async function run() {
-  try { 
-      ...
-  } 
-  catch (error) {
-    core.setFailed(error.message);
-  }
-}
-
-run()
-```
-
-See the [toolkit documentation](https://github.com/actions/toolkit/blob/master/README.md#packages) for the various packages.
-
-## Publish to a distribution branch
-
-Actions are run from GitHub repos so we will checkin the packed dist folder. 
-
-Then run [ncc](https://github.com/zeit/ncc) and push the results:
-```bash
-$ npm run package
-$ git add dist
-$ git commit -a -m "prod dependencies"
-$ git push origin releases/v1
-```
-
-Note: We recommend using the `--license` option for ncc, which will create a license file for all of the production node modules used in your project.
-
-Your action is now published! :rocket: 
-
-See the [versioning documentation](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md)
-
-## Validate
-
-You can now validate the action by referencing `./` in a workflow in your repo (see [test.yml](.github/workflows/test.yml))
-
-```yaml
-uses: ./
-with:
-  milliseconds: 1000
-```
-
-See the [actions tab](https://github.com/actions/typescript-action/actions) for runs of this action! :rocket:
-
-## Usage:
-
-After testing you can [create a v1 tag](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md) to reference the stable and latest V1 action
+| Name | Description |
+|---|---|
+| `is-ahead` | True if the current branch's version is ahead of the main branch's version |
+| `are-equal` | True if the current branch's version and the main branch's versions are equal |
+| `is-behind` | True if the current branch's version is behind the main branch's version |
+| `current-version` | The current version as a JSON string with `majorVersion`, `minorVersion`, and `patchVersion` properties |
+| `main-version` | The main version as a JSON string with `majorVersion`, `minorVersion`, and `patchVersion` properties |
+| `current-version-formatted` | The current version as a string on the format `vx.y.z` |
+| `main-version-formatted` | The main version as a string on the format `vx.y.z` |

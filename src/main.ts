@@ -1,19 +1,65 @@
-import * as core from '@actions/core'
-import {wait} from './wait'
+import * as core from "@actions/core";
+import { checkoutMain, checkoutCurrentBranch } from "./helpers/git.helpers";
+import {
+  findLibraryVersion,
+  formatVersion,
+  versionDifference,
+} from "./helpers/version.helpers";
+
+const MAIN_DIRECTORY = "main";
+const CURRENT_BRANCH_DIRECTORY = "current-branch";
+
+const options = {
+  failIfNotAhead: "fail-if-not-ahead",
+};
+
+const outputs = {
+  isAhead: "is-ahead",
+  areEqual: "are-equal",
+  isBehind: "is-behind",
+  currentVersion: "current-version",
+  mainVersion: "main-version",
+  currentVersionFormatted: "current-version-formatted",
+  mainVersionFormatted: "main-version-formatted",
+};
 
 async function run(): Promise<void> {
   try {
-    const ms: string = core.getInput('milliseconds')
-    core.debug(`Waiting ${ms} milliseconds ...`) // debug is only output if you set the secret `ACTIONS_STEP_DEBUG` to true
+    const failIfNotAhead = core.getInput(options.failIfNotAhead) === "true";
 
-    core.debug(new Date().toTimeString())
-    await wait(parseInt(ms, 10))
-    core.debug(new Date().toTimeString())
+    await checkoutMain(MAIN_DIRECTORY);
+    await checkoutCurrentBranch(CURRENT_BRANCH_DIRECTORY);
 
-    core.setOutput('time', new Date().toTimeString())
+    const mainVersion = await findLibraryVersion(MAIN_DIRECTORY);
+    const currentBranchVersion = await findLibraryVersion(
+      CURRENT_BRANCH_DIRECTORY,
+    );
+
+    const versionDiff = versionDifference(currentBranchVersion, mainVersion);
+
+    const isAhead = versionDiff === 1;
+    const areEqual = versionDiff === 0;
+    const isBehind = versionDiff === -1;
+
+    core.setOutput(outputs.isAhead, isAhead);
+    core.setOutput(outputs.areEqual, areEqual);
+    core.setOutput(outputs.isBehind, isBehind);
+
+    core.setOutput(outputs.currentVersion, currentBranchVersion);
+    core.setOutput(outputs.mainVersion, mainVersion);
+
+    core.setOutput(outputs.currentVersion, formatVersion(currentBranchVersion));
+    core.setOutput(outputs.mainVersion, formatVersion(mainVersion));
+
+    if (failIfNotAhead && !isAhead) {
+      core.setFailed(`Current branch's version is not ahead of main branch.
+      Remember to update \`library.json\`.
+      Current branch version: ${formatVersion(currentBranchVersion)}.
+      Main version: ${formatVersion(mainVersion)}`);
+    }
   } catch (error) {
-    if (error instanceof Error) core.setFailed(error.message)
+    if (error instanceof Error) core.setFailed(error.message);
   }
 }
 
-run()
+run();
