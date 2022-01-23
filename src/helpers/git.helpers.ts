@@ -1,7 +1,7 @@
 import * as exec from "@actions/exec";
 import * as github from "@actions/github";
 
-export async function authenticate() {
+export async function authenticate(): Promise<void> {
   await exec.exec(`git config --global user.email "action@github.com"`);
   await exec.exec(`git config --global user.name "GitHub Action"`);
 }
