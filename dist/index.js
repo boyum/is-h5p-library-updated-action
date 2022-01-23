@@ -36,6 +36,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getBranchName = exports.getPrNumber = exports.checkoutCurrentBranch = exports.checkoutMain = exports.checkoutRepo = exports.authenticate = void 0;
+const core = __importStar(__nccwpck_require__(2186));
 const exec = __importStar(__nccwpck_require__(1514));
 const github = __importStar(__nccwpck_require__(5438));
 function authenticate() {
@@ -64,6 +65,7 @@ function checkoutCurrentBranch(directoryName, githubToken) {
     return __awaiter(this, void 0, void 0, function* () {
         yield checkoutRepo(directoryName);
         const currentBranch = yield getBranchName(githubToken);
+        core.info(`Current branch: '${currentBranch}'`);
         yield exec.exec(`git checkout ${currentBranch}`, undefined, {
             cwd: directoryName,
         });
@@ -189,6 +191,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(2186));
 const git_helpers_1 = __nccwpck_require__(145);
 const version_helpers_1 = __nccwpck_require__(6485);
+const github = __importStar(__nccwpck_require__(5438));
 const MAIN_DIRECTORY = "main";
 const CURRENT_BRANCH_DIRECTORY = "current-branch";
 const options = {
@@ -209,6 +212,9 @@ function run() {
         try {
             const githubToken = core.getInput(options.githubToken);
             const failIfNotAhead = core.getInput(options.failIfNotAhead) === "true";
+            core.info(`Ref: '${github.context.ref}'`);
+            core.info(`Event name: '${github.context.eventName}'`);
+            core.info(`Action: '${github.context.action}'`);
             yield (0, git_helpers_1.checkoutMain)(MAIN_DIRECTORY);
             yield (0, git_helpers_1.checkoutCurrentBranch)(CURRENT_BRANCH_DIRECTORY, githubToken);
             const mainVersion = yield (0, version_helpers_1.findLibraryVersion)(MAIN_DIRECTORY);

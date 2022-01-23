@@ -1,3 +1,4 @@
+import * as core from "@actions/core";
 import * as exec from "@actions/exec";
 import * as github from "@actions/github";
 
@@ -25,6 +26,7 @@ export async function checkoutCurrentBranch(
   await checkoutRepo(directoryName);
 
   const currentBranch = await getBranchName(githubToken);
+  core.info(`Current branch: '${currentBranch}'`);
 
   await exec.exec(`git checkout ${currentBranch}`, undefined, {
     cwd: directoryName,
