@@ -189,6 +189,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(2186));
 const git_helpers_1 = __nccwpck_require__(145);
 const version_helpers_1 = __nccwpck_require__(6485);
+const github = __importStar(__nccwpck_require__(5438));
 const MAIN_DIRECTORY = "main";
 const CURRENT_BRANCH_DIRECTORY = "current-branch";
 const options = {
@@ -209,6 +210,7 @@ function run() {
         try {
             const githubToken = core.getInput(options.githubToken);
             const failIfNotAhead = core.getInput(options.failIfNotAhead) === "true";
+            core.debug(`Ref: ${github.context.ref}`);
             yield (0, git_helpers_1.checkoutMain)(MAIN_DIRECTORY);
             yield (0, git_helpers_1.checkoutCurrentBranch)(CURRENT_BRANCH_DIRECTORY, githubToken);
             const mainVersion = yield (0, version_helpers_1.findLibraryVersion)(MAIN_DIRECTORY);
