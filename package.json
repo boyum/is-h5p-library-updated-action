@@ -1,17 +1,18 @@
 {
-  "name": "typescript-action",
+  "name": "is-h5p-library-updated-action",
   "version": "0.0.0",
   "private": true,
-  "description": "TypeScript template action",
+  "description": "Checks the current branch's and the main branch's H5P library version to see if the current branch is ahead of the main branch",
   "main": "lib/main.js",
   "scripts": {
     "build": "tsc",
     "format": "prettier --write '**/*.ts'",
     "format-check": "prettier --check '**/*.ts'",
-    "lint": "eslint src/**/*.ts",
-    "package": "ncc build --source-map --license licenses.txt",
+    "lint": "eslint src/**/*.ts --fix",
+    "lint-check": "eslint src/**/*.ts",
+    "package": "npm run build && ncc build --source-map --license licenses.txt",
     "test": "jest",
-    "all": "npm run build && npm run format && npm run lint && npm run package && npm test"
+    "all": "npm run format && npm run lint && npm run package && npm test"
   },
   "repository": {
     "type": "git",
