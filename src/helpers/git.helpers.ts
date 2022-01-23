@@ -48,11 +48,11 @@ export async function getBranchName(githubToken: string): Promise<string> {
   const { owner, repo } = github.context.repo;
   const prNumber = getPrNumber();
 
-  const response = await octokit.rest.pulls.get({
+  const { data: pullRequest } = await octokit.rest.pulls.get({
     owner,
     repo,
     pull_number: prNumber,
   });
 
-  return response.data.head.ref;
+  return pullRequest.head.ref;
 }
