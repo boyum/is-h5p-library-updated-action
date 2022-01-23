@@ -210,7 +210,8 @@ function run() {
         try {
             const githubToken = core.getInput(options.githubToken);
             const failIfNotAhead = core.getInput(options.failIfNotAhead) === "true";
-            core.debug(`Ref: ${github.context.ref}`);
+            core.info(`Ref: ${github.context.ref}`);
+            core.info(`Trigger: ${github.context.eventName}`);
             yield (0, git_helpers_1.checkoutMain)(MAIN_DIRECTORY);
             yield (0, git_helpers_1.checkoutCurrentBranch)(CURRENT_BRANCH_DIRECTORY, githubToken);
             const mainVersion = yield (0, version_helpers_1.findLibraryVersion)(MAIN_DIRECTORY);
