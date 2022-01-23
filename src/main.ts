@@ -5,6 +5,7 @@ import {
   formatVersion,
   versionDifference,
 } from "./helpers/version.helpers";
+import * as github from "@actions/github";
 
 const MAIN_DIRECTORY = "main";
 const CURRENT_BRANCH_DIRECTORY = "current-branch";
@@ -28,6 +29,8 @@ async function run(): Promise<void> {
   try {
     const githubToken = core.getInput(options.githubToken);
     const failIfNotAhead = core.getInput(options.failIfNotAhead) === "true";
+
+    core.debug(`Ref: ${github.context.ref}`);
 
     await checkoutMain(MAIN_DIRECTORY);
     await checkoutCurrentBranch(CURRENT_BRANCH_DIRECTORY, githubToken);
