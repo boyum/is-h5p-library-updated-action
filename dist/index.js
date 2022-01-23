@@ -198,8 +198,8 @@ function run() {
             core.setOutput(outputs.isBehind, isBehind);
             core.setOutput(outputs.currentVersion, currentBranchVersion);
             core.setOutput(outputs.mainVersion, mainVersion);
-            core.setOutput(outputs.currentVersion, (0, version_helpers_1.formatVersion)(currentBranchVersion));
-            core.setOutput(outputs.mainVersion, (0, version_helpers_1.formatVersion)(mainVersion));
+            core.setOutput(outputs.currentVersionFormatted, (0, version_helpers_1.formatVersion)(currentBranchVersion));
+            core.setOutput(outputs.mainVersionFormatted, (0, version_helpers_1.formatVersion)(mainVersion));
             if (failIfNotAhead && !isAhead) {
                 core.setFailed(`Current branch's version is not ahead of main branch.
       Remember to update \`library.json\`.

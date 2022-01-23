@@ -48,8 +48,11 @@ async function run(): Promise<void> {
     core.setOutput(outputs.currentVersion, currentBranchVersion);
     core.setOutput(outputs.mainVersion, mainVersion);
 
-    core.setOutput(outputs.currentVersion, formatVersion(currentBranchVersion));
-    core.setOutput(outputs.mainVersion, formatVersion(mainVersion));
+    core.setOutput(
+      outputs.currentVersionFormatted,
+      formatVersion(currentBranchVersion),
+    );
+    core.setOutput(outputs.mainVersionFormatted, formatVersion(mainVersion));
 
     if (failIfNotAhead && !isAhead) {
       core.setFailed(`Current branch's version is not ahead of main branch.
