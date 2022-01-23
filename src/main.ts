@@ -29,7 +29,7 @@ async function run(): Promise<void> {
   try {
     const githubToken = core.getInput(options.githubToken);
     const failIfNotAhead = core.getInput(options.failIfNotAhead) === "true";
-    
+
     core.info(`Ref: '${github.context.ref}'`);
     core.info(`Event name: '${github.context.eventName}'`);
     core.info(`Action: '${github.context.action}'`);
