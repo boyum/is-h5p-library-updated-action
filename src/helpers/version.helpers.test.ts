@@ -110,10 +110,10 @@ describe(versionDifference.name, () => {
       patchVersion: 0,
     };
 
-    const expected = false;
+    const expected = -1;
     const actual = versionDifference(versionA, versionB);
 
-    expect(actual).toBe<typeof actual>(-1);
+    expect(actual).toBe<typeof actual>(expected);
   });
 
   it("should return -1 if the first version is behind the second: patch", () => {
