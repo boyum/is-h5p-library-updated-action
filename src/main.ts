@@ -30,7 +30,8 @@ async function run(): Promise<void> {
     const githubToken = core.getInput(options.githubToken);
     const failIfNotAhead = core.getInput(options.failIfNotAhead) === "true";
 
-    core.debug(`Ref: ${github.context.ref}`);
+    core.info(`Ref: ${github.context.ref}`);
+    core.info(`Trigger: ${github.context.eventName}`);
 
     await checkoutMain(MAIN_DIRECTORY);
     await checkoutCurrentBranch(CURRENT_BRANCH_DIRECTORY, githubToken);
