@@ -35,13 +35,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.checkoutCurrentBranch = exports.checkoutMain = exports.checkoutRepo = void 0;
+exports.checkoutCurrentBranch = exports.checkoutMain = exports.checkoutRepo = exports.authenticate = void 0;
 const exec = __importStar(__nccwpck_require__(1514));
 const github = __importStar(__nccwpck_require__(5438));
+function authenticate() {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield exec.exec(`git config --global user.email "action@github.com"`);
+        yield exec.exec(`git config --global user.name "GitHub Action"`);
+    });
+}
+exports.authenticate = authenticate;
 function checkoutRepo(directoryName) {
     return __awaiter(this, void 0, void 0, function* () {
         const { owner, repo } = github.context.repo;
         const gitHubUri = `git@github.com:${owner}/${repo}.git`;
+        yield authenticate();
         yield exec.exec(`git clone ${gitHubUri} ${directoryName}`);
     });
 }
