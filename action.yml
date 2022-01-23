@@ -1,5 +1,5 @@
 name: Is H5P library updated
-description: Checks the current branch's and the main branch's H5P library version to see if the current branch is ahead of the main branch
+description: Checks H5P library versions to see if the current branch is ahead of the main branch
 author: boyum
 
 branding:
