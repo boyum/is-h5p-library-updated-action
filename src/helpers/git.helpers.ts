@@ -8,7 +8,7 @@ export async function authenticate() {
 
 export async function checkoutRepo(directoryName: string): Promise<void> {
   const { owner, repo } = github.context.repo;
-  const gitHubUri = `git@github.com:${owner}/${repo}.git`;
+  const gitHubUri = `https://github.com/${owner}/${repo}.git`;
 
   await authenticate();
   await exec.exec(`git clone ${gitHubUri} ${directoryName}`);
