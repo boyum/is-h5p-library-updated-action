@@ -7,6 +7,11 @@ branding:
   color: blue
 
 inputs:
+  github-token:
+    required: false
+    description: GITHUB_TOKEN or a repo scoped PAT
+    default: ${{ github.token }}
+
   fail-if-not-ahead:
     required: false
     description: Fail this step if the current branch's version is not ahead of the main branch's version

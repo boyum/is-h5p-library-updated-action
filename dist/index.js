@@ -35,7 +35,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.checkoutCurrentBranch = exports.checkoutMain = exports.checkoutRepo = exports.authenticate = void 0;
+exports.getBranchName = exports.getPrNumber = exports.checkoutCurrentBranch = exports.checkoutMain = exports.checkoutRepo = exports.authenticate = void 0;
 const exec = __importStar(__nccwpck_require__(1514));
 const github = __importStar(__nccwpck_require__(5438));
 function authenticate() {
@@ -60,16 +60,38 @@ function checkoutMain(directoryName) {
     });
 }
 exports.checkoutMain = checkoutMain;
-function checkoutCurrentBranch(directoryName) {
+function checkoutCurrentBranch(directoryName, githubToken) {
     return __awaiter(this, void 0, void 0, function* () {
         yield checkoutRepo(directoryName);
-        const currentBranch = github.context.ref.replace("refs/heads/", "");
+        const currentBranch = yield getBranchName(githubToken);
         yield exec.exec(`git checkout ${currentBranch}`, undefined, {
             cwd: directoryName,
         });
     });
 }
 exports.checkoutCurrentBranch = checkoutCurrentBranch;
+function getPrNumber() {
+    const pullRequest = github.context.payload.pull_request;
+    if (!pullRequest) {
+        throw new Error("Action was not triggered by `pull_request`, thus cannot complete.");
+    }
+    return pullRequest.number;
+}
+exports.getPrNumber = getPrNumber;
+function getBranchName(githubToken) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const octokit = github.getOctokit(githubToken);
+        const { owner, repo } = github.context.repo;
+        const prNumber = getPrNumber();
+        const response = yield octokit.rest.pulls.get({
+            owner,
+            repo,
+            pull_number: prNumber,
+        });
+        return response.data.head.ref;
+    });
+}
+exports.getBranchName = getBranchName;
 
 
 /***/ }),
@@ -170,6 +192,7 @@ const version_helpers_1 = __nccwpck_require__(6485);
 const MAIN_DIRECTORY = "main";
 const CURRENT_BRANCH_DIRECTORY = "current-branch";
 const options = {
+    githubToken: "github-token",
     failIfNotAhead: "fail-if-not-ahead",
 };
 const outputs = {
@@ -184,9 +207,10 @@ const outputs = {
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
+            const githubToken = core.getInput(options.githubToken);
             const failIfNotAhead = core.getInput(options.failIfNotAhead) === "true";
             yield (0, git_helpers_1.checkoutMain)(MAIN_DIRECTORY);
-            yield (0, git_helpers_1.checkoutCurrentBranch)(CURRENT_BRANCH_DIRECTORY);
+            yield (0, git_helpers_1.checkoutCurrentBranch)(CURRENT_BRANCH_DIRECTORY, githubToken);
             const mainVersion = yield (0, version_helpers_1.findLibraryVersion)(MAIN_DIRECTORY);
             const currentBranchVersion = yield (0, version_helpers_1.findLibraryVersion)(CURRENT_BRANCH_DIRECTORY);
             const versionDiff = (0, version_helpers_1.versionDifference)(currentBranchVersion, mainVersion);

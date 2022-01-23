@@ -10,6 +10,7 @@ const MAIN_DIRECTORY = "main";
 const CURRENT_BRANCH_DIRECTORY = "current-branch";
 
 const options = {
+  githubToken: "github-token",
   failIfNotAhead: "fail-if-not-ahead",
 };
 
@@ -25,10 +26,11 @@ const outputs = {
 
 async function run(): Promise<void> {
   try {
+    const githubToken = core.getInput(options.githubToken);
     const failIfNotAhead = core.getInput(options.failIfNotAhead) === "true";
 
     await checkoutMain(MAIN_DIRECTORY);
-    await checkoutCurrentBranch(CURRENT_BRANCH_DIRECTORY);
+    await checkoutCurrentBranch(CURRENT_BRANCH_DIRECTORY, githubToken);
 
     const mainVersion = await findLibraryVersion(MAIN_DIRECTORY);
     const currentBranchVersion = await findLibraryVersion(
