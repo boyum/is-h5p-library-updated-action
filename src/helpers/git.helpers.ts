@@ -20,11 +20,39 @@ export async function checkoutMain(directoryName: string): Promise<void> {
 
 export async function checkoutCurrentBranch(
   directoryName: string,
+  githubToken: string,
 ): Promise<void> {
   await checkoutRepo(directoryName);
 
-  const currentBranch = github.context.ref.replace("refs/heads/", "");
+  const currentBranch = await getBranchName(githubToken);
+
   await exec.exec(`git checkout ${currentBranch}`, undefined, {
     cwd: directoryName,
   });
+}
+
+export function getPrNumber(): number {
+  const pullRequest = github.context.payload.pull_request;
+
+  if (!pullRequest) {
+    throw new Error(
+      "Action was not triggered by `pull_request`, thus cannot complete.",
+    );
+  }
+
+  return pullRequest.number;
+}
+
+export async function getBranchName(githubToken: string): Promise<string> {
+  const octokit = github.getOctokit(githubToken);
+  const { owner, repo } = github.context.repo;
+  const prNumber = getPrNumber();
+
+  const response = await octokit.rest.pulls.get({
+    owner,
+    repo,
+    pull_number: prNumber,
+  });
+
+  return response.data.head.ref;
 }

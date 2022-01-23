@@ -4,6 +4,16 @@ This action checks whether the current branch's H5P version is ahead of, equal t
 
 ## Usage
 
+This action needs to be triggered by `pull_request`, something like this:
+
+```yml
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+```
+
 ### Break the build if the version numbers aren't updated
 
 ```yml
@@ -56,6 +66,7 @@ This action checks whether the current branch's H5P version is ahead of, equal t
 
 | Name | Required | Default value | Description |
 |---|---|---|---|
+| `github-token` | false | `secrets.GITHUB_TOKEN` | GITHUB_TOKEN or a repo scoped PAT. |
 | `fail-if-not-ahead` | false | `false` | Fail this step if the current branch's version is not ahead of the main branch's version. |
 
 ## Outputs
