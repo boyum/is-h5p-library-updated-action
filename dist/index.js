@@ -83,12 +83,12 @@ function getBranchName(githubToken) {
         const octokit = github.getOctokit(githubToken);
         const { owner, repo } = github.context.repo;
         const prNumber = getPrNumber();
-        const response = yield octokit.rest.pulls.get({
+        const { data: pullRequest } = yield octokit.rest.pulls.get({
             owner,
             repo,
             pull_number: prNumber,
         });
-        return response.data.head.ref;
+        return pullRequest.head.ref;
     });
 }
 exports.getBranchName = getBranchName;
