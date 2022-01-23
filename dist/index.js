@@ -48,7 +48,7 @@ exports.authenticate = authenticate;
 function checkoutRepo(directoryName) {
     return __awaiter(this, void 0, void 0, function* () {
         const { owner, repo } = github.context.repo;
-        const gitHubUri = `git@github.com:${owner}/${repo}.git`;
+        const gitHubUri = `https://github.com/${owner}/${repo}.git`;
         yield authenticate();
         yield exec.exec(`git clone ${gitHubUri} ${directoryName}`);
     });
