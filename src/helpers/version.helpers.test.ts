@@ -1,4 +1,4 @@
-import { Version } from "../types/version";
+import type { Version } from "../types/version";
 import { versionDifference } from "./version.helpers";
 
 describe(versionDifference.name, () => {
