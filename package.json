@@ -28,7 +28,8 @@
   "dependencies": {
     "@actions/core": "^1.6.0",
     "@actions/exec": "^1.1.1",
-    "@actions/github": "^5.0.1"
+    "@actions/github": "^5.0.1",
+    "h5p-types": "github:boyum/h5p-types"
   },
   "devDependencies": {
     "@types/jest": "^27.4.1",

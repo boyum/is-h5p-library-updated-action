@@ -1,7 +1,7 @@
 import fs from "fs";
+import type { Library } from "h5p-types";
 import path from "path";
-import { Library } from "../types/library";
-import { Version } from "../types/version";
+import type { Version } from "../types/version";
 
 export async function findLibraryVersion(directory: string): Promise<Version> {
   const libraryString = (
