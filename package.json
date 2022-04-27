@@ -2,6 +2,7 @@
   "name": "is-h5p-library-updated-action",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
   "description": "Checks the current branch's and the main branch's H5P library version to see if the current branch is ahead of the main branch",
   "main": "lib/main.js",
   "scripts": {
