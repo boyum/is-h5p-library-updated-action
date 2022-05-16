@@ -37,6 +37,10 @@ async function run(): Promise<void> {
     core.info(`Event name: '${github.context.eventName}'`);
     core.info(`Action: '${github.context.action}'`);
 
+    core.info("Options:");
+    core.info(`${options.failIfNotAhead}: '${failIfNotAhead}'`);
+    core.info(`${options.workingDirectory}: '${workingDirectory}'`);
+
     await checkoutMain(MAIN_DIRECTORY);
     await checkoutCurrentBranch(CURRENT_BRANCH_DIRECTORY, githubToken);
 

@@ -226,6 +226,9 @@ function run() {
             core.info(`Ref: '${github.context.ref}'`);
             core.info(`Event name: '${github.context.eventName}'`);
             core.info(`Action: '${github.context.action}'`);
+            core.info("Options:");
+            core.info(`${options.failIfNotAhead}: '${failIfNotAhead}'`);
+            core.info(`${options.workingDirectory}: '${workingDirectory}'`);
             yield (0, git_helpers_1.checkoutMain)(MAIN_DIRECTORY);
             yield (0, git_helpers_1.checkoutCurrentBranch)(CURRENT_BRANCH_DIRECTORY, githubToken);
             const mainLibrary = (0, path_1.join)(MAIN_DIRECTORY, workingDirectory);
