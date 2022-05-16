@@ -198,7 +198,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(2186));
 const github = __importStar(__nccwpck_require__(5438));
-const node_path_1 = __nccwpck_require__(9411);
+const path_1 = __nccwpck_require__(1017);
 const git_helpers_1 = __nccwpck_require__(145);
 const version_helpers_1 = __nccwpck_require__(6485);
 const MAIN_DIRECTORY = "main";
@@ -228,9 +228,9 @@ function run() {
             core.info(`Action: '${github.context.action}'`);
             yield (0, git_helpers_1.checkoutMain)(MAIN_DIRECTORY);
             yield (0, git_helpers_1.checkoutCurrentBranch)(CURRENT_BRANCH_DIRECTORY, githubToken);
-            const mainLibrary = (0, node_path_1.join)(MAIN_DIRECTORY, workingDirectory);
+            const mainLibrary = (0, path_1.join)(MAIN_DIRECTORY, workingDirectory);
             const mainVersion = yield (0, version_helpers_1.findLibraryVersion)(mainLibrary);
-            const currentBranchLibrary = (0, node_path_1.join)(CURRENT_BRANCH_DIRECTORY, workingDirectory);
+            const currentBranchLibrary = (0, path_1.join)(CURRENT_BRANCH_DIRECTORY, workingDirectory);
             const currentBranchVersion = yield (0, version_helpers_1.findLibraryVersion)(currentBranchLibrary);
             const versionDiff = (0, version_helpers_1.versionDifference)(currentBranchVersion, mainVersion);
             const isAhead = versionDiff === 1;
@@ -10178,14 +10178,6 @@ module.exports = require("https");
 
 "use strict";
 module.exports = require("net");
-
-/***/ }),
-
-/***/ 9411:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("node:path");
 
 /***/ }),
 
