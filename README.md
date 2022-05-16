@@ -68,7 +68,7 @@ on:
 |---|---|---|---|
 | `github-token` | false | `secrets.GITHUB_TOKEN` | GITHUB_TOKEN or a repo scoped PAT. |
 | `fail-if-not-ahead` | false | `false` | Fail this step if the current branch's version is not ahead of the main branch's version. |
-| `working-directory` | false    | `.`           | The directory where the library.json file is located, relative to the Git project.                                         |
+| `working-directory` | false  | `.` | The directory where the library.json file is located, relative to the Git project. |
 
 ### Outputs
 

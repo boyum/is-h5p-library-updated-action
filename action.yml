@@ -20,7 +20,7 @@ inputs:
   working-directory:
     required: false
     description: The working directory to run the command in
-    default: './'
+    default: "."
 
 outputs:
   is-ahead:
@@ -47,4 +47,3 @@ outputs:
 runs:
   using: node12
   main: dist/index.js
-

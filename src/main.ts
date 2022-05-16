@@ -1,11 +1,12 @@
 import * as core from "@actions/core";
-import { checkoutMain, checkoutCurrentBranch } from "./helpers/git.helpers";
+import * as github from "@actions/github";
+import { join } from "path";
+import { checkoutCurrentBranch, checkoutMain } from "./helpers/git.helpers";
 import {
   findLibraryVersion,
   formatVersion,
   versionDifference,
 } from "./helpers/version.helpers";
-import * as github from "@actions/github";
 
 const MAIN_DIRECTORY = "main";
 const CURRENT_BRANCH_DIRECTORY = "current-branch";
@@ -39,12 +40,14 @@ async function run(): Promise<void> {
     await checkoutMain(MAIN_DIRECTORY);
     await checkoutCurrentBranch(CURRENT_BRANCH_DIRECTORY, githubToken);
 
-    const mainVersion = await findLibraryVersion(
-      MAIN_DIRECTORY + workingDirectory,
+    const mainLibrary = join(MAIN_DIRECTORY, workingDirectory);
+    const mainVersion = await findLibraryVersion(mainLibrary);
+
+    const currentBranchLibrary = join(
+      CURRENT_BRANCH_DIRECTORY,
+      workingDirectory,
     );
-    const currentBranchVersion = await findLibraryVersion(
-      CURRENT_BRANCH_DIRECTORY + workingDirectory,
-    );
+    const currentBranchVersion = await findLibraryVersion(currentBranchLibrary);
 
     const versionDiff = versionDifference(currentBranchVersion, mainVersion);
 
