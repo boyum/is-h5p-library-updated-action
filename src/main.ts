@@ -13,6 +13,7 @@ const CURRENT_BRANCH_DIRECTORY = "current-branch";
 const options = {
   githubToken: "github-token",
   failIfNotAhead: "fail-if-not-ahead",
+  workingDirectory: "working-directory",
 };
 
 const outputs = {
@@ -29,6 +30,7 @@ async function run(): Promise<void> {
   try {
     const githubToken = core.getInput(options.githubToken);
     const failIfNotAhead = core.getInput(options.failIfNotAhead) === "true";
+    const workingDirectory = core.getInput(options.workingDirectory);
 
     core.info(`Ref: '${github.context.ref}'`);
     core.info(`Event name: '${github.context.eventName}'`);
@@ -37,9 +39,9 @@ async function run(): Promise<void> {
     await checkoutMain(MAIN_DIRECTORY);
     await checkoutCurrentBranch(CURRENT_BRANCH_DIRECTORY, githubToken);
 
-    const mainVersion = await findLibraryVersion(MAIN_DIRECTORY);
+    const mainVersion = await findLibraryVersion(MAIN_DIRECTORY+workingDirectory);
     const currentBranchVersion = await findLibraryVersion(
-      CURRENT_BRANCH_DIRECTORY,
+      CURRENT_BRANCH_DIRECTORY+workingDirectory,
     );
 
     const versionDiff = versionDifference(currentBranchVersion, mainVersion);
