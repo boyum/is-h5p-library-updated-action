@@ -16,6 +16,7 @@ inputs:
     required: false
     description: Fail this step if the current branch's version is not ahead of the main branch's version
     default: "false"
+
   working-directory:
     required: false
     description: The working directory to run the command in
