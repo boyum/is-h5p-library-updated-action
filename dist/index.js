@@ -205,6 +205,7 @@ const CURRENT_BRANCH_DIRECTORY = "current-branch";
 const options = {
     githubToken: "github-token",
     failIfNotAhead: "fail-if-not-ahead",
+    workingDirectory: "working-directory",
 };
 const outputs = {
     isAhead: "is-ahead",
@@ -220,13 +221,14 @@ function run() {
         try {
             const githubToken = core.getInput(options.githubToken);
             const failIfNotAhead = core.getInput(options.failIfNotAhead) === "true";
+            const workingDirectory = core.getInput(options.workingDirectory);
             core.info(`Ref: '${github.context.ref}'`);
             core.info(`Event name: '${github.context.eventName}'`);
             core.info(`Action: '${github.context.action}'`);
             yield (0, git_helpers_1.checkoutMain)(MAIN_DIRECTORY);
             yield (0, git_helpers_1.checkoutCurrentBranch)(CURRENT_BRANCH_DIRECTORY, githubToken);
-            const mainVersion = yield (0, version_helpers_1.findLibraryVersion)(MAIN_DIRECTORY);
-            const currentBranchVersion = yield (0, version_helpers_1.findLibraryVersion)(CURRENT_BRANCH_DIRECTORY);
+            const mainVersion = yield (0, version_helpers_1.findLibraryVersion)(MAIN_DIRECTORY + workingDirectory);
+            const currentBranchVersion = yield (0, version_helpers_1.findLibraryVersion)(CURRENT_BRANCH_DIRECTORY + workingDirectory);
             const versionDiff = (0, version_helpers_1.versionDifference)(currentBranchVersion, mainVersion);
             const isAhead = versionDiff === 1;
             const areEqual = versionDiff === 0;
