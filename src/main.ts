@@ -39,9 +39,11 @@ async function run(): Promise<void> {
     await checkoutMain(MAIN_DIRECTORY);
     await checkoutCurrentBranch(CURRENT_BRANCH_DIRECTORY, githubToken);
 
-    const mainVersion = await findLibraryVersion(MAIN_DIRECTORY+workingDirectory);
+    const mainVersion = await findLibraryVersion(
+      MAIN_DIRECTORY + workingDirectory,
+    );
     const currentBranchVersion = await findLibraryVersion(
-      CURRENT_BRANCH_DIRECTORY+workingDirectory,
+      CURRENT_BRANCH_DIRECTORY + workingDirectory,
     );
 
     const versionDiff = versionDifference(currentBranchVersion, mainVersion);
