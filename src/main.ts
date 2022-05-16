@@ -1,6 +1,6 @@
 import * as core from "@actions/core";
 import * as github from "@actions/github";
-import { join } from "node:path";
+import { join } from "path";
 import { checkoutCurrentBranch, checkoutMain } from "./helpers/git.helpers";
 import {
   findLibraryVersion,
