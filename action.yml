@@ -17,6 +17,11 @@ inputs:
     description: Fail this step if the current branch's version is not ahead of the main branch's version
     default: "false"
 
+  working-directory:
+    required: false
+    description: The working directory to run the command in
+    default: './'
+
 outputs:
   is-ahead:
     description: True if the current branch's version is ahead of the main branch's version
@@ -42,3 +47,4 @@ outputs:
 runs:
   using: node12
   main: dist/index.js
+
