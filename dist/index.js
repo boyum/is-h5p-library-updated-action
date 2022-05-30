@@ -1,6 +1,269 @@
 require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ 145:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.getBranchName = exports.getPrNumber = exports.checkoutCurrentBranch = exports.checkoutMain = exports.checkoutRepo = exports.authenticate = void 0;
+const core = __importStar(__nccwpck_require__(2186));
+const exec = __importStar(__nccwpck_require__(1514));
+const github = __importStar(__nccwpck_require__(5438));
+function authenticate() {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield exec.exec(`git config --global user.email "action@github.com"`);
+        yield exec.exec(`git config --global user.name "GitHub Action"`);
+    });
+}
+exports.authenticate = authenticate;
+function checkoutRepo(directoryName) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const { owner, repo } = github.context.repo;
+        const gitHubUri = `https://github.com/${owner}/${repo}.git`;
+        yield authenticate();
+        yield exec.exec(`git clone ${gitHubUri} ${directoryName}`);
+    });
+}
+exports.checkoutRepo = checkoutRepo;
+function checkoutMain(directoryName) {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield checkoutRepo(directoryName);
+    });
+}
+exports.checkoutMain = checkoutMain;
+function checkoutCurrentBranch(directoryName, githubToken) {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield checkoutRepo(directoryName);
+        const currentBranch = yield getBranchName(githubToken);
+        core.info(`Current branch: '${currentBranch}'`);
+        yield exec.exec(`git checkout ${currentBranch}`, undefined, {
+            cwd: directoryName,
+        });
+    });
+}
+exports.checkoutCurrentBranch = checkoutCurrentBranch;
+function getPrNumber() {
+    const pullRequest = github.context.payload.pull_request;
+    if (!pullRequest) {
+        throw new Error("Action was not triggered by `pull_request`, thus cannot complete.");
+    }
+    return pullRequest.number;
+}
+exports.getPrNumber = getPrNumber;
+function getBranchName(githubToken) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const octokit = github.getOctokit(githubToken);
+        const { owner, repo } = github.context.repo;
+        const prNumber = getPrNumber();
+        const { data: pullRequest } = yield octokit.rest.pulls.get({
+            owner,
+            repo,
+            pull_number: prNumber,
+        });
+        return pullRequest.head.ref;
+    });
+}
+exports.getBranchName = getBranchName;
+
+
+/***/ }),
+
+/***/ 6485:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.formatVersion = exports.versionDifference = exports.findLibraryVersion = void 0;
+const fs_1 = __importDefault(__nccwpck_require__(7147));
+const path_1 = __importDefault(__nccwpck_require__(1017));
+function findLibraryVersion(directory) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const libraryString = (yield fs_1.default.promises.readFile(path_1.default.join(directory, "library.json"))).toString("utf-8");
+        const library = JSON.parse(libraryString);
+        return library;
+    });
+}
+exports.findLibraryVersion = findLibraryVersion;
+/**
+ * Returns 1 if A is ahead of B, 0 if they are equal, -1 if B is ahead of A
+ */
+function versionDifference(versionA, versionB) {
+    const versionsAreEqual = versionA.majorVersion === versionB.majorVersion &&
+        versionA.minorVersion === versionB.minorVersion &&
+        versionA.patchVersion === versionB.patchVersion;
+    if (versionsAreEqual) {
+        return 0;
+    }
+    const aIsAheadOfB = versionA.majorVersion > versionB.majorVersion ||
+        (versionA.majorVersion === versionB.majorVersion &&
+            versionA.minorVersion > versionB.minorVersion) ||
+        (versionA.majorVersion === versionB.majorVersion &&
+            versionA.minorVersion === versionB.minorVersion &&
+            versionA.patchVersion > versionB.patchVersion);
+    return aIsAheadOfB ? 1 : -1;
+}
+exports.versionDifference = versionDifference;
+function formatVersion(version) {
+    return `v${version.majorVersion}.${version.minorVersion}.${version.patchVersion}`;
+}
+exports.formatVersion = formatVersion;
+
+
+/***/ }),
+
+/***/ 3109:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const core = __importStar(__nccwpck_require__(2186));
+const github = __importStar(__nccwpck_require__(5438));
+const path_1 = __nccwpck_require__(1017);
+const git_helpers_1 = __nccwpck_require__(145);
+const version_helpers_1 = __nccwpck_require__(6485);
+const MAIN_DIRECTORY = "main";
+const CURRENT_BRANCH_DIRECTORY = "current-branch";
+const options = {
+    githubToken: "github-token",
+    failIfNotAhead: "fail-if-not-ahead",
+    workingDirectory: "working-directory",
+};
+const outputs = {
+    isAhead: "is-ahead",
+    areEqual: "are-equal",
+    isBehind: "is-behind",
+    currentVersion: "current-version",
+    mainVersion: "main-version",
+    currentVersionFormatted: "current-version-formatted",
+    mainVersionFormatted: "main-version-formatted",
+};
+function run() {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const githubToken = core.getInput(options.githubToken);
+            const failIfNotAhead = core.getInput(options.failIfNotAhead) === "true";
+            const workingDirectory = core.getInput(options.workingDirectory);
+            core.info(`Ref: '${github.context.ref}'`);
+            core.info(`Event name: '${github.context.eventName}'`);
+            core.info(`Action: '${github.context.action}'`);
+            core.info("Options:");
+            core.info(`${options.failIfNotAhead}: '${failIfNotAhead}'`);
+            core.info(`${options.workingDirectory}: '${workingDirectory}'`);
+            yield (0, git_helpers_1.checkoutMain)(MAIN_DIRECTORY);
+            yield (0, git_helpers_1.checkoutCurrentBranch)(CURRENT_BRANCH_DIRECTORY, githubToken);
+            const mainLibrary = (0, path_1.join)(MAIN_DIRECTORY, workingDirectory);
+            const mainVersion = yield (0, version_helpers_1.findLibraryVersion)(mainLibrary);
+            const currentBranchLibrary = (0, path_1.join)(CURRENT_BRANCH_DIRECTORY, workingDirectory);
+            const currentBranchVersion = yield (0, version_helpers_1.findLibraryVersion)(currentBranchLibrary);
+            const versionDiff = (0, version_helpers_1.versionDifference)(currentBranchVersion, mainVersion);
+            const isAhead = versionDiff === 1;
+            const areEqual = versionDiff === 0;
+            const isBehind = versionDiff === -1;
+            core.setOutput(outputs.isAhead, isAhead);
+            core.setOutput(outputs.areEqual, areEqual);
+            core.setOutput(outputs.isBehind, isBehind);
+            core.setOutput(outputs.currentVersion, currentBranchVersion);
+            core.setOutput(outputs.mainVersion, mainVersion);
+            core.setOutput(outputs.currentVersionFormatted, (0, version_helpers_1.formatVersion)(currentBranchVersion));
+            core.setOutput(outputs.mainVersionFormatted, (0, version_helpers_1.formatVersion)(mainVersion));
+            if (failIfNotAhead && !isAhead) {
+                core.setFailed(`Current branch's version is not ahead of main branch.
+      Remember to update \`library.json\`.
+      Current branch version: ${(0, version_helpers_1.formatVersion)(currentBranchVersion)}.
+      Main version: ${(0, version_helpers_1.formatVersion)(mainVersion)}`);
+            }
+        }
+        catch (error) {
+            if (error instanceof Error)
+                core.setFailed(error.message);
+        }
+    });
+}
+run();
+
+
+/***/ }),
+
 /***/ 7351:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -10102,228 +10365,6 @@ module.exports = require("zlib");
 
 /***/ }),
 
-/***/ 3410:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
-
-"use strict";
-
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getBranchName = exports.getPrNumber = exports.checkoutCurrentBranch = exports.checkoutMain = exports.checkoutRepo = exports.authenticate = void 0;
-const core = __importStar(__nccwpck_require__(2186));
-const exec = __importStar(__nccwpck_require__(1514));
-const github = __importStar(__nccwpck_require__(5438));
-async function authenticate() {
-    await exec.exec(`git config --global user.email "action@github.com"`);
-    await exec.exec(`git config --global user.name "GitHub Action"`);
-}
-exports.authenticate = authenticate;
-async function checkoutRepo(directoryName) {
-    const { owner, repo } = github.context.repo;
-    const gitHubUri = `https://github.com/${owner}/${repo}.git`;
-    await authenticate();
-    await exec.exec(`git clone ${gitHubUri} ${directoryName}`);
-}
-exports.checkoutRepo = checkoutRepo;
-async function checkoutMain(directoryName) {
-    await checkoutRepo(directoryName);
-}
-exports.checkoutMain = checkoutMain;
-async function checkoutCurrentBranch(directoryName, githubToken) {
-    await checkoutRepo(directoryName);
-    const currentBranch = await getBranchName(githubToken);
-    core.info(`Current branch: '${currentBranch}'`);
-    await exec.exec(`git checkout ${currentBranch}`, undefined, {
-        cwd: directoryName,
-    });
-}
-exports.checkoutCurrentBranch = checkoutCurrentBranch;
-function getPrNumber() {
-    const pullRequest = github.context.payload.pull_request;
-    if (!pullRequest) {
-        throw new Error("Action was not triggered by `pull_request`, thus cannot complete.");
-    }
-    return pullRequest.number;
-}
-exports.getPrNumber = getPrNumber;
-async function getBranchName(githubToken) {
-    const octokit = github.getOctokit(githubToken);
-    const { owner, repo } = github.context.repo;
-    const prNumber = getPrNumber();
-    const { data: pullRequest } = await octokit.rest.pulls.get({
-        owner,
-        repo,
-        pull_number: prNumber,
-    });
-    return pullRequest.head.ref;
-}
-exports.getBranchName = getBranchName;
-
-
-/***/ }),
-
-/***/ 2738:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
-
-"use strict";
-
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.formatVersion = exports.versionDifference = exports.findLibraryVersion = void 0;
-const fs_1 = __importDefault(__nccwpck_require__(7147));
-const path_1 = __importDefault(__nccwpck_require__(1017));
-async function findLibraryVersion(directory) {
-    const libraryString = (await fs_1.default.promises.readFile(path_1.default.join(directory, "library.json"))).toString("utf-8");
-    const library = JSON.parse(libraryString);
-    return library;
-}
-exports.findLibraryVersion = findLibraryVersion;
-/**
- * Returns 1 if A is ahead of B, 0 if they are equal, -1 if B is ahead of A
- */
-function versionDifference(versionA, versionB) {
-    const versionsAreEqual = versionA.majorVersion === versionB.majorVersion &&
-        versionA.minorVersion === versionB.minorVersion &&
-        versionA.patchVersion === versionB.patchVersion;
-    if (versionsAreEqual) {
-        return 0;
-    }
-    const aIsAheadOfB = versionA.majorVersion > versionB.majorVersion ||
-        (versionA.majorVersion === versionB.majorVersion &&
-            versionA.minorVersion > versionB.minorVersion) ||
-        (versionA.majorVersion === versionB.majorVersion &&
-            versionA.minorVersion === versionB.minorVersion &&
-            versionA.patchVersion > versionB.patchVersion);
-    return aIsAheadOfB ? 1 : -1;
-}
-exports.versionDifference = versionDifference;
-function formatVersion(version) {
-    return `v${version.majorVersion}.${version.minorVersion}.${version.patchVersion}`;
-}
-exports.formatVersion = formatVersion;
-
-
-/***/ }),
-
-/***/ 1292:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
-
-"use strict";
-
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const core = __importStar(__nccwpck_require__(2186));
-const github = __importStar(__nccwpck_require__(5438));
-const path_1 = __nccwpck_require__(1017);
-const git_helpers_1 = __nccwpck_require__(3410);
-const version_helpers_1 = __nccwpck_require__(2738);
-const MAIN_DIRECTORY = "main";
-const CURRENT_BRANCH_DIRECTORY = "current-branch";
-const options = {
-    githubToken: "github-token",
-    failIfNotAhead: "fail-if-not-ahead",
-    workingDirectory: "working-directory",
-};
-const outputs = {
-    isAhead: "is-ahead",
-    areEqual: "are-equal",
-    isBehind: "is-behind",
-    currentVersion: "current-version",
-    mainVersion: "main-version",
-    currentVersionFormatted: "current-version-formatted",
-    mainVersionFormatted: "main-version-formatted",
-};
-async function run() {
-    try {
-        const githubToken = core.getInput(options.githubToken);
-        const failIfNotAhead = core.getInput(options.failIfNotAhead) === "true";
-        const workingDirectory = core.getInput(options.workingDirectory);
-        core.info(`Ref: '${github.context.ref}'`);
-        core.info(`Event name: '${github.context.eventName}'`);
-        core.info(`Action: '${github.context.action}'`);
-        core.info("Options:");
-        core.info(`${options.failIfNotAhead}: '${failIfNotAhead}'`);
-        core.info(`${options.workingDirectory}: '${workingDirectory}'`);
-        await (0, git_helpers_1.checkoutMain)(MAIN_DIRECTORY);
-        await (0, git_helpers_1.checkoutCurrentBranch)(CURRENT_BRANCH_DIRECTORY, githubToken);
-        const mainLibrary = (0, path_1.join)(MAIN_DIRECTORY, workingDirectory);
-        const mainVersion = await (0, version_helpers_1.findLibraryVersion)(mainLibrary);
-        const currentBranchLibrary = (0, path_1.join)(CURRENT_BRANCH_DIRECTORY, workingDirectory);
-        const currentBranchVersion = await (0, version_helpers_1.findLibraryVersion)(currentBranchLibrary);
-        const versionDiff = (0, version_helpers_1.versionDifference)(currentBranchVersion, mainVersion);
-        const isAhead = versionDiff === 1;
-        const areEqual = versionDiff === 0;
-        const isBehind = versionDiff === -1;
-        core.setOutput(outputs.isAhead, isAhead);
-        core.setOutput(outputs.areEqual, areEqual);
-        core.setOutput(outputs.isBehind, isBehind);
-        core.setOutput(outputs.currentVersion, currentBranchVersion);
-        core.setOutput(outputs.mainVersion, mainVersion);
-        core.setOutput(outputs.currentVersionFormatted, (0, version_helpers_1.formatVersion)(currentBranchVersion));
-        core.setOutput(outputs.mainVersionFormatted, (0, version_helpers_1.formatVersion)(mainVersion));
-        if (failIfNotAhead && !isAhead) {
-            core.setFailed(`Current branch's version is not ahead of main branch.
-      Remember to update \`library.json\`.
-      Current branch version: ${(0, version_helpers_1.formatVersion)(currentBranchVersion)}.
-      Main version: ${(0, version_helpers_1.formatVersion)(mainVersion)}`);
-        }
-    }
-    catch (error) {
-        if (error instanceof Error)
-            core.setFailed(error.message);
-    }
-}
-run();
-
-
-/***/ }),
-
 /***/ 1907:
 /***/ ((module) => {
 
@@ -10374,7 +10415,7 @@ module.exports = JSON.parse('[[[0,44],"disallowed_STD3_valid"],[[45,46],"valid"]
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module is referenced by other modules so it can't be inlined
-/******/ 	var __webpack_exports__ = __nccwpck_require__(1292);
+/******/ 	var __webpack_exports__ = __nccwpck_require__(3109);
 /******/ 	module.exports = __webpack_exports__;
 /******/ 	
 /******/ })()
