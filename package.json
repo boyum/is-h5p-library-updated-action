@@ -4,7 +4,7 @@
   "private": true,
   "description": "Checks the current branch's and the main branch's H5P library version to see if the current branch is ahead of the main branch",
   "main": "lib/main.js",
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
     "build": "tsc",
     "format": "prettier --write '**/*.ts'",
