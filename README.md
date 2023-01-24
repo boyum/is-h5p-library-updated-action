@@ -17,7 +17,7 @@ on:
 ### Break the build if the version numbers aren't updated
 
 ```yml
-- uses: boyum/is-h5p-library-updated-action@v1
+- uses: boyum/is-h5p-library-updated-action@v2.1
   with:
     fail-if-not-ahead: true
 ```
@@ -25,7 +25,7 @@ on:
 ### Post a comment if the version numbers aren't updated
 
 ```yml
-- uses: boyum/is-h5p-library-updated-action@v1
+- uses: boyum/is-h5p-library-updated-action@v2.1
   id: h5p-version-check
 
 - uses: jwalton/gh-find-current-pr@v1 # https://github.com/jwalton/gh-find-current-pr
@@ -46,7 +46,7 @@ on:
 ### Create a release only if there's a new version
 
 ```yml
-- uses: boyum/is-h5p-library-updated-action@v1
+- uses: boyum/is-h5p-library-updated-action@v2.1
   id: h5p-version-check
 
 - uses: boyum/pack-h5p-action@0.0.6 # https://github.com/boyum/pack-h5p-action
