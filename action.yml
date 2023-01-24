@@ -45,5 +45,5 @@ outputs:
     description: The main version as a string on the format `vx.y.z`
 
 runs:
-  using: node12
+  using: node16
   main: dist/index.js
