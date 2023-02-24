@@ -49,7 +49,7 @@ on:
 - uses: boyum/is-h5p-library-updated-action@v1.1
   id: h5p-version-check
 
-- uses: boyum/pack-h5p-action@0.0.6 # https://github.com/boyum/pack-h5p-action
+- uses: boyum/pack-h5p-action@v1.0.0 # https://github.com/boyum/pack-h5p-action
   id: release-h5p
 
 - uses: "marvinpinto/action-automatic-releases@latest" # https://github.com/marvinpinto/actions/tree/master/packages/automatic-releases
