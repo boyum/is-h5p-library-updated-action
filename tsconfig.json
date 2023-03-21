@@ -6,7 +6,8 @@
     "rootDir": "./src",                       /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */
     "esModuleInterop": true                   /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */,
     "allowJs": false,
-    "checkJs": false
+    "checkJs": false,
+    "ignoreDeprecations": "5.0"
   },
   "exclude": ["node_modules", "dist", "lib"],
   "extends": "@tsconfig/strictest/tsconfig.json"
