@@ -6,22 +6,21 @@
   "main": "lib/main.js",
   "scripts": {
     "build": "tsc",
-    "format": "prettier --write '**/*.ts'",
-    "format-check": "prettier --check '**/*.ts'",
+    "format:fix": "prettier --write '**/*.ts'",
+    "format:check": "prettier --check '**/*.ts'",
     "lint": "eslint src/**/*.ts --fix",
     "lint-check": "eslint src/**/*.ts",
     "package": "npm run build && ncc build --source-map --license licenses.txt",
     "test": "jest",
-    "all": "npm run format && npm run lint && npm run package && npm test"
+    "all": "npm run format:fix && npm run lint && npm run package && npm test"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/actions/typescript-action.git"
+    "url": "git+https://github.com/boyum/is-h5p-library-updated-action.git"
   },
   "keywords": [
     "actions",
-    "node",
-    "setup"
+    "h5p"
   ],
   "author": "",
   "license": "MIT",
