@@ -5,7 +5,5 @@
   "minorVersion": 0,
   "patchVersion": 0,
   "runnable": 1,
-  "preloadedJs": [
-    {"path": "mylib.js"}
-  ]
+  "preloadedJs": [{ "path": "mylib.js" }]
 }

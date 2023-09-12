@@ -64,31 +64,34 @@ on:
 
 ### Options
 
-| Name | Required | Default value | Description |
-|---|---|---|---|
-| `github-token` | false | `secrets.GITHUB_TOKEN` | GITHUB_TOKEN or a repo scoped PAT. |
-| `fail-if-not-ahead` | false | `false` | Fail this step if the current branch's version is not ahead of the main branch's version. |
-| `working-directory` | false  | `.` | The directory where the library.json file is located, relative to the Git project. |
+| Name                | Required | Default value          | Description                                                                               |
+| ------------------- | -------- | ---------------------- | ----------------------------------------------------------------------------------------- |
+| `github-token`      | false    | `secrets.GITHUB_TOKEN` | GITHUB_TOKEN or a repo scoped PAT.                                                        |
+| `fail-if-not-ahead` | false    | `false`                | Fail this step if the current branch's version is not ahead of the main branch's version. |
+| `working-directory` | false    | `.`                    | The directory where the library.json file is located, relative to the Git project.        |
 
 ### Outputs
 
-| Name | Description |
-|---|---|
-| `is-ahead` | True if the current branch's version is ahead of the main branch's version |
-| `are-equal` | True if the current branch's version and the main branch's versions are equal |
-| `is-behind` | True if the current branch's version is behind the main branch's version |
-| `current-version` | The current version as a JSON string with `majorVersion`, `minorVersion`, and `patchVersion` properties |
-| `main-version` | The main version as a JSON string with `majorVersion`, `minorVersion`, and `patchVersion` properties |
-| `current-version-formatted` | The current version as a string on the format `vx.y.z` |
-| `main-version-formatted` | The main version as a string on the format `vx.y.z` |
+| Name                        | Description                                                                                             |
+| --------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `is-ahead`                  | True if the current branch's version is ahead of the main branch's version                              |
+| `are-equal`                 | True if the current branch's version and the main branch's versions are equal                           |
+| `is-behind`                 | True if the current branch's version is behind the main branch's version                                |
+| `current-version`           | The current version as a JSON string with `majorVersion`, `minorVersion`, and `patchVersion` properties |
+| `main-version`              | The main version as a JSON string with `majorVersion`, `minorVersion`, and `patchVersion` properties    |
+| `current-version-formatted` | The current version as a string on the format `vx.y.z`                                                  |
+| `main-version-formatted`    | The main version as a string on the format `vx.y.z`                                                     |
 
 ## Development
+
+This project uses [Bun](https://bun.sh) as package manager.
+It can be installed with `npm i -g bun`.
 
 ### Releasing new versions
 
 #### Create release
 
-Each release has its own Git *tag*. Do these steps to create a new release:
+Each release has its own Git _tag_. Do these steps to create a new release:
 
 1. Create the tag: `git tag <version>`
 1. Push the tag to origin: `git push origin <version>`
