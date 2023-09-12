@@ -1,3 +1,5 @@
+// eslint-disable-next-line import/no-unresolved
+import { describe, it, expect } from "bun:test";
 import type { Version } from "../types/version";
 import { versionDifference } from "./version.helpers";
 
@@ -18,7 +20,7 @@ describe(versionDifference.name, () => {
     const expected = 1;
     const actual = versionDifference(versionA, versionB);
 
-    expect(actual).toBe<typeof actual>(expected);
+    expect(actual).toBe(expected);
   });
 
   it("should return 1 if the first version is ahead of the second: minor", () => {
@@ -37,7 +39,7 @@ describe(versionDifference.name, () => {
     const expected = 1;
     const actual = versionDifference(versionA, versionB);
 
-    expect(actual).toBe<typeof actual>(expected);
+    expect(actual).toBe(expected);
   });
 
   it("should return 1 if the first version is ahead of the second: patch", () => {
@@ -56,7 +58,7 @@ describe(versionDifference.name, () => {
     const expected = 1;
     const actual = versionDifference(versionA, versionB);
 
-    expect(actual).toBe<typeof actual>(expected);
+    expect(actual).toBe(expected);
   });
 
   it("should return 0 if the first version is equal to the second", () => {
@@ -75,7 +77,7 @@ describe(versionDifference.name, () => {
     const expected = 0;
     const actual = versionDifference(versionA, versionB);
 
-    expect(actual).toBe<typeof actual>(expected);
+    expect(actual).toBe(expected);
   });
 
   it("should return -1 if the first version is behind the second: major", () => {
@@ -94,7 +96,7 @@ describe(versionDifference.name, () => {
     const expected = -1;
     const actual = versionDifference(versionA, versionB);
 
-    expect(actual).toBe<typeof actual>(expected);
+    expect(actual).toBe(expected);
   });
 
   it("should return -1 if the first version is behind the second: minor", () => {
@@ -113,7 +115,7 @@ describe(versionDifference.name, () => {
     const expected = -1;
     const actual = versionDifference(versionA, versionB);
 
-    expect(actual).toBe<typeof actual>(expected);
+    expect(actual).toBe(expected);
   });
 
   it("should return -1 if the first version is behind the second: patch", () => {
@@ -132,6 +134,6 @@ describe(versionDifference.name, () => {
     const expected = -1;
     const actual = versionDifference(versionA, versionB);
 
-    expect(actual).toBe<typeof actual>(expected);
+    expect(actual).toBe(expected);
   });
 });
