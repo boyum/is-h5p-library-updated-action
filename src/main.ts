@@ -1,12 +1,12 @@
 import * as core from "@actions/core";
 import * as github from "@actions/github";
-import { join } from "path";
-import { checkoutCurrentBranch, checkoutMain } from "./helpers/git.helpers";
+import { join } from "node:path";
+import { checkoutCurrentBranch, checkoutMain } from "./helpers/git.helpers.js";
 import {
   findLibraryVersion,
   formatVersion,
   versionDifference,
-} from "./helpers/version.helpers";
+} from "./helpers/version.helpers.js";
 
 const MAIN_DIRECTORY = "main";
 const CURRENT_BRANCH_DIRECTORY = "current-branch";

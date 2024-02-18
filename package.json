@@ -12,7 +12,8 @@
     "url": "git+https://github.com/boyum/is-h5p-library-updated-action.git"
   },
   "license": "MIT",
-  "author": "",
+  "author": "Sindre Bøyum",
+  "type": "module",
   "main": "lib/main.js",
   "scripts": {
     "all": "npm run format:fix && npm run lint && npm run package && npm test",
@@ -33,12 +34,12 @@
   "devDependencies": {
     "@tsconfig/strictest": "^2.0.3",
     "@types/jest": "^29.5.12",
-    "@types/node": "^20.11.17",
-    "@typescript-eslint/parser": "^6.21.0",
+    "@types/node": "^20.11.19",
+    "@typescript-eslint/parser": "^7.0.1",
     "@vercel/ncc": "^0.38.1",
     "eslint": "^8.56.0",
     "eslint-plugin-github": "^4.10.1",
-    "eslint-plugin-jest": "^27.8.0",
+    "eslint-plugin-jest": "^27.9.0",
     "h5p-types": "^5.1.0",
     "jest": "^29.7.0",
     "js-yaml": "^4.1.0",

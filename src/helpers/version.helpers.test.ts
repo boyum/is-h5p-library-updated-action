@@ -1,5 +1,5 @@
-import type { Version } from "../types/version";
-import { versionDifference } from "./version.helpers";
+import type { Version } from "../types/version.js";
+import { versionDifference } from "./version.helpers.js";
 
 describe(versionDifference.name, () => {
   it("should return 1 if the first version is ahead of the second: major", () => {
