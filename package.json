@@ -45,6 +45,6 @@
     "prettier": "^3.2.5",
     "prettier-config": "github:boyum/prettier-config",
     "typescript": "^5.4.5",
-    "vitest": "^1.5.1"
+    "vitest": "^1.5.2"
   }
 }
