@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import type { Version } from "../types/version.js";
 import { versionDifference } from "./version.helpers.js";
 

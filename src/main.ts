@@ -1,6 +1,6 @@
+import { join } from "node:path";
 import * as core from "@actions/core";
 import * as github from "@actions/github";
-import { join } from "node:path";
 import { checkoutCurrentBranch, checkoutMain } from "./helpers/git.helpers.js";
 import {
   findLibraryVersion,
