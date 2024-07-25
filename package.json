@@ -33,6 +33,6 @@
     "h5p-types": "^5.4.0",
     "js-yaml": "^4.1.0",
     "typescript": "^5.5.3",
-    "vitest": "^2.0.3"
+    "vitest": "^2.0.4"
   }
 }
