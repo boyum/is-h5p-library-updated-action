@@ -28,7 +28,7 @@
   "devDependencies": {
     "@biomejs/biome": "^1.9.1",
     "@tsconfig/strictest": "^2.0.5",
-    "@types/node": "^22.5.4",
+    "@types/node": "^22.5.5",
     "@vercel/ncc": "^0.38.1",
     "h5p-types": "^5.5.0",
     "js-yaml": "^4.1.0",
