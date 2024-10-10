@@ -14,7 +14,7 @@
   "main": "lib/main.js",
   "scripts": {
     "all": "npm run lint:fix && npm run package && npm test",
-    "build": "esbuild ./src/main.ts --bundle --platform=node --target=node20 --outfile=lib/main.js",
+    "build": "esbuild ./src/main.ts --bundle --platform=node --target=node20 --outfile=lib/main.js --format=esm",
     "lint:check": "biome check .",
     "lint:fix": "biome check --write .",
     "package": "npm run build && ncc build --source-map --license licenses.txt",
