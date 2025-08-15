@@ -1,6 +1,6 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.8.3/schema.json",
-  "files": { "ignore": ["dist", "lib"] },
+  "$schema": "https://biomejs.dev/schemas/2.2.0/schema.json",
+  "files": { "includes": ["**", "!**/dist", "!**/lib"] },
   "formatter": {
     "enabled": true,
     "formatWithErrors": false,
@@ -10,16 +10,18 @@
     "lineWidth": 80,
     "attributePosition": "auto"
   },
-  "organizeImports": { "enabled": true },
+  "assist": { "actions": { "source": { "organizeImports": "on" } } },
   "linter": {
     "enabled": true,
     "rules": {
       "recommended": false,
       "complexity": {
         "noExtraBooleanCast": "error",
-        "noMultipleSpacesInRegularExpressionLiterals": "error",
         "noStaticOnlyClass": "error",
-        "noUselessConstructor": "error"
+        "noUselessConstructor": "error",
+        "noAdjacentSpacesInRegex": "error",
+        "noArguments": "error",
+        "noCommaOperator": "error"
       },
       "correctness": {
         "noConstAssign": "error",
@@ -29,7 +31,6 @@
         "noGlobalObjectCalls": "error",
         "noInnerDeclarations": "error",
         "noInvalidConstructorSuper": "error",
-        "noNewSymbol": "error",
         "noSelfAssign": "error",
         "noSwitchDeclarations": "error",
         "noUndeclaredVariables": "error",
@@ -39,15 +40,14 @@
         "noUnusedLabels": "error",
         "noUnusedVariables": "error",
         "useIsNan": "error",
-        "useYield": "error"
+        "useYield": "error",
+        "noInvalidBuiltinInstantiation": "error",
+        "useValidTypeof": "error"
       },
       "style": {
-        "noArguments": "error",
-        "noCommaOperator": "error",
         "noInferrableTypes": "error",
         "noNamespace": "error",
         "noNonNullAssertion": "warn",
-        "noVar": "error",
         "useConsistentArrayType": "error",
         "useConst": "error",
         "useForOf": "warn",
@@ -74,10 +74,16 @@
         "noMisleadingInstantiator": "error",
         "noRedeclare": "error",
         "noUnsafeNegation": "error",
-        "useValidTypeof": "error"
+        "noVar": "error"
       }
     },
-    "ignore": ["**/dist/", "**/lib/", "**/node_modules/", "**/jest.config.js"]
+    "includes": [
+      "**",
+      "!**/dist/",
+      "!**/lib/",
+      "!**/node_modules/",
+      "!**/jest.config.js"
+    ]
   },
   "javascript": {
     "formatter": {
