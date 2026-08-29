@@ -32,7 +32,7 @@
     "@biomejs/biome": "^2.5.10",
     "@tsconfig/strictest": "^2.0.8",
     "@types/node": "^22.14.1",
-    "@vercel/ncc": "^0.44.1",
+    "@vercel/ncc": "^0.45.0",
     "h5p-types": "^5.6.0",
     "js-yaml": "^5.3.0",
     "typescript": "^7.0.2",
