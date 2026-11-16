@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.15",
-    "@tsconfig/strictest": "^2.0.8",
+    "@tsconfig/strictest": "^2.0.9",
     "@types/node": "^22.14.1",
     "@vercel/ncc": "^0.45.0",
     "h5p-types": "^5.7.0",
